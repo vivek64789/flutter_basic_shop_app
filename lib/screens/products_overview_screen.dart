@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/screens/cart_screen.dart';
 import 'package:shopapp/widgets/badge.dart';
+import 'package:shopapp/widgets/drawer.dart';
 import 'package:shopapp/widgets/product_grid.dart';
 
 enum filters {
@@ -11,6 +12,7 @@ enum filters {
 }
 
 class ProductsOverView extends StatefulWidget {
+  static const routeName = '/products';
   ProductsOverView({Key? key}) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class _ProductsOverViewState extends State<ProductsOverView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer:  DrawerWidget(),
       appBar: AppBar(
         title: Text("Products"),
         actions: [

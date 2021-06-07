@@ -50,8 +50,27 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  void addProduct() {
+  void addProduct(Product product) {
+    final tempProduct = Product(
+        id: DateTime.now().toString(),
+        title: product.title,
+        description: product.description,
+        imageUrl: product.imageUrl,
+        price: product.price);
+
+    _items.add(tempProduct);
     notifyListeners(); // this will notify that our data is updated and it will
     //rebuild the widgets that listens to this notifier
+  }
+
+  removeItem(String productId) {
+    _items.removeWhere((item) => item.id == productId);
+    notifyListeners();
+  }
+
+  void updateProduct(String id, Product editedProduct) {
+    final index = _items.indexWhere((item) => item.id == id);
+    _items[index] = editedProduct;
+    notifyListeners();
   }
 }

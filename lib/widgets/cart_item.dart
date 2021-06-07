@@ -1,15 +1,14 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/providers/cart.dart';
 
 class CartItem extends StatelessWidget {
-  String id;
-  String title;
-  double price;
-  int quantity;
-  String imageUrl;
-  String productId;
+  final String id;
+  final String title;
+  final double price;
+  final int quantity;
+  final String imageUrl;
+  final String productId;
   CartItem(
       {Key? key,
       required this.id,
@@ -26,6 +25,31 @@ class CartItem extends StatelessWidget {
     return Dismissible(
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Are you sure?"),
+                content:
+                    Text("Do you want to remove this item from your cart?"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                    child: Text("Yes"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                    child: Text("No"),
+                  ),
+                ],
+              );
+            });
+      },
       onDismissed: (direction) {
         itemProvider.deleteCartItem(productId);
       },

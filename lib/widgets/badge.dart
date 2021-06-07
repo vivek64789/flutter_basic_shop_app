@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class Badge extends StatelessWidget {
-  Widget child;
-  String value;
-  Color color;
+  final Widget child;
+  final String value;
+  final Color color;
 
   Badge({
     Key? key,

@@ -53,7 +53,7 @@ class _ProductsOverViewState extends State<ProductsOverView> {
             icon: Icon(Icons.more_vert),
           ),
           Consumer<Cart>(
-            builder: (_, cart, _1) => Badge(
+            builder: (_, cart, child) => Badge(
               child: IconButton(
                 icon: cart.checkIfCartEmpty
                     ? Icon(Icons.shopping_cart_outlined)

@@ -61,6 +61,11 @@ class ProductItem extends StatelessWidget {
                   product.price,
                   product.imageUrl,
                 ),
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Item Added"),
+                  ),
+                ),
               },
             ),
           ),

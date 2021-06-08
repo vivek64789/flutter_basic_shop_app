@@ -19,6 +19,7 @@ class ManageUserProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productProvider = Provider.of<Products>(context, listen: false);
+    var scaffoldMessenger = ScaffoldMessenger.of(context);
     return Card(
       child: ListTile(
         leading: CircleAvatar(
@@ -40,8 +41,24 @@ class ManageUserProductItem extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {
-                    productProvider.removeItem(productId);
+                  onPressed: () async {
+                    try {
+                      await productProvider.removeItem(productId).then((_) {
+                        scaffoldMessenger.showSnackBar(SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text(
+                              "Deleted Successfully",
+                              textAlign: TextAlign.center,
+                            )));
+                      });
+                    } catch (error) {
+                      scaffoldMessenger.showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            "$error",
+                            textAlign: TextAlign.center,
+                          )));
+                    }
                   },
                   icon: Icon(
                     Icons.delete,

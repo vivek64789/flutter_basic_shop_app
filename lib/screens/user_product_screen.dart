@@ -9,6 +9,7 @@ class UserProductScreen extends StatelessWidget {
   static const routeName = "/manage_user-product";
   const UserProductScreen({Key? key}) : super(key: key);
 
+
   Future<void> _refreshProducts(BuildContext context) async {
     await Provider.of<Products>(context, listen: false).fetchAndSetProducts();
   }
@@ -38,6 +39,7 @@ class UserProductScreen extends StatelessWidget {
           ),
           child: ListView.builder(
             itemBuilder: (_, index) {
+
               return ManageUserProductItem(
                 id: productProvider.items[index].id,
                 title: productProvider.items[index].title,

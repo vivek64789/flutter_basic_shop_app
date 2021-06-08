@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class CartItem {
   String id;
@@ -50,14 +53,45 @@ class Cart with ChangeNotifier {
   }
 
   void toggleCartItem(
-      String productId, String title, double price, String imageUrl) {
+    String productId,
+    String title,
+    double price,
+    String imageUrl,
+  ) async {
+    Uri getPostUrl = Uri.parse(
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart.json",
+    );
+    String itemId = '';
+    _items.forEach((key, cartItem) {
+      itemId = _items[key]!.id;
+    });
+    print("object $itemId");
+    Uri deleteUrl = Uri.parse(
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart/$itemId.json",
+    );
+    itemId = '';
     if (_items.containsKey(productId)) {
       _items.removeWhere((itemId, cartItem) => itemId == productId);
-    } else {
+      http.delete(deleteUrl);
+
+    } 
+    
+    else
+     {
+      final _response = await http.post(getPostUrl,
+          body: (json.encode({
+            'title': title,
+            'price': price,
+            'quantity': 1,
+            'imageUrl': imageUrl,
+          })));
+
+      var _responseData = json.decode(_response.body) as Map<String, dynamic>;
+
       _items.putIfAbsent(
         productId,
         () => CartItem(
-            id: DateTime.now().toString(),
+            id: _responseData['name'],
             title: title,
             price: price,
             quantity: 1,

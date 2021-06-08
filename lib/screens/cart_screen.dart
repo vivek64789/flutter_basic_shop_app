@@ -36,19 +36,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     label: Text('Rs ${itemProvider.totalCartAmount}'),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Provider.of<Orders>(context, listen: false).placeOrder(
-                        itemProvider.items.values.toList(),
-                        double.parse(itemProvider.totalCartAmount),
-                      );
-                      itemProvider.clearAllItems();
-                    },
-                    child: Text(
-                      "Order Now",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
+                  OrderButton(itemProvider: itemProvider),
                   IconButton(
                     onPressed: () {
                       itemProvider.clearAllItems();
@@ -87,5 +75,49 @@ class CartScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key? key,
+    required this.itemProvider,
+  }) : super(key: key);
+
+  final Cart itemProvider;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  bool _isLoading = false;
+  @override
+  Widget build(BuildContext context) {
+    return _isLoading
+        ? Container(
+            margin: EdgeInsets.all(10), child: CircularProgressIndicator())
+        : TextButton(
+            onPressed: double.parse(widget.itemProvider.totalCartAmount) <= 0
+                ? null
+                : () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    await Provider.of<Orders>(context, listen: false)
+                        .placeOrder(
+                      widget.itemProvider.items.values.toList(),
+                      double.parse(widget.itemProvider.totalCartAmount),
+                    );
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    widget.itemProvider.clearAllItems();
+                  },
+            child: Text(
+              "Order Now",
+              style: TextStyle(fontSize: 18),
+            ),
+          );
   }
 }

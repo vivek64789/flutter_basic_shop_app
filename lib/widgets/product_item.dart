@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopapp/providers/auth.dart';
 import 'package:shopapp/providers/cart.dart';
 import 'package:shopapp/providers/product.dart';
 import 'package:shopapp/screens/product_detail_screen.dart';
@@ -8,6 +9,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context);
+    final token = Provider.of<Auth>(context, listen: false).token;
     /*
     final providerData = Provider.of<Product>(context); 
     */
@@ -34,7 +36,7 @@ class ProductItem extends StatelessWidget {
               ),
               onPressed: () async {
                 try {
-                  await product.toggleFavorite();
+                  await product.toggleFavorite(token);
                 } catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -72,6 +74,7 @@ class ProductItem extends StatelessWidget {
                   product.title,
                   product.price,
                   product.imageUrl,
+                  token,
                 ),
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(

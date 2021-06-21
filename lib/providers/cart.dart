@@ -52,14 +52,10 @@ class Cart with ChangeNotifier {
     return _items.isEmpty;
   }
 
-  void toggleCartItem(
-    String productId,
-    String title,
-    double price,
-    String imageUrl,
-  ) async {
+  void toggleCartItem(String productId, String title, double price,
+      String imageUrl, String token) async {
     Uri getPostUrl = Uri.parse(
-      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart.json",
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart.json?auth=$token",
     );
     String itemId = '';
     _items.forEach((key, cartItem) {
@@ -67,17 +63,13 @@ class Cart with ChangeNotifier {
     });
     print("object $itemId");
     Uri deleteUrl = Uri.parse(
-      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart/$itemId.json",
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/cart/$itemId.json?auth=$token",
     );
     itemId = '';
     if (_items.containsKey(productId)) {
       _items.removeWhere((itemId, cartItem) => itemId == productId);
       http.delete(deleteUrl);
-
-    } 
-    
-    else
-     {
+    } else {
       final _response = await http.post(getPostUrl,
           body: (json.encode({
             'title': title,

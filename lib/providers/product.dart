@@ -21,14 +21,14 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
-  Future<void> toggleFavorite() async {
+  Future<void> toggleFavorite(String token) async {
     var _tempIsFavorite = isFavorite;
     // print("isFavorite: $isFavorite");
     // print("tempIsFavorite: $_tempIsFavorite");
     isFavorite = !isFavorite;
     notifyListeners();
     Uri url = Uri.parse(
-      "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$id.json",
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$id.json?auth=$token",
     );
 
     // print("$id, $title, $description, $price, $imageUrl");

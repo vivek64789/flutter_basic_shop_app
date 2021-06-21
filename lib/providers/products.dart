@@ -6,7 +6,11 @@ import 'package:shopapp/models/http_exception.dart';
 import 'package:shopapp/providers/product.dart';
 
 class Products with ChangeNotifier {
-  List<Product> _items = [];
+  List<Product> _items;
+
+  final String _token;
+
+  Products(this._token, this._items);
 
   List<Product> get items {
     return [..._items]; // where here copying the original _items
@@ -23,7 +27,7 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts() async {
     Uri url = Uri.parse(
-      "https://shopapp-fc37d-default-rtdb.firebaseio.com/products.json",
+      "https://shopapp-fc37d-default-rtdb.firebaseio.com/products.json?auth=$_token",
     );
     try {
       final response = await http.get(url);
@@ -52,7 +56,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     try {
       Uri url = Uri.parse(
-          "https://shopapp-fc37d-default-rtdb.firebaseio.com/products.json");
+          "https://shopapp-fc37d-default-rtdb.firebaseio.com/products.json?auth=$_token");
       var response = await http.post(
         url,
         body: json.encode(
@@ -84,7 +88,7 @@ class Products with ChangeNotifier {
 
   Future<void> removeItem(String productId) async {
     Uri url = Uri.parse(
-        "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$productId.json");
+        "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$productId.json?auth=$_token");
 
     final index = _items.indexWhere((item) => item.id == productId);
     var _copiedProduct = _items[index];
@@ -104,7 +108,7 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product editedProduct) async {
     final index = _items.indexWhere((product) => product.id == id);
     Uri url = Uri.parse(
-        "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$id.json");
+        "https://shopapp-fc37d-default-rtdb.firebaseio.com/products/$id.json?auth=$_token");
     if (index >= 0) {
       await http.patch(
         url,
